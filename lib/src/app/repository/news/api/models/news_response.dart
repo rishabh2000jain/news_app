@@ -10,7 +10,7 @@ class NewsResponse {
   NewsResponse({
     String? status,
     int? totalResults,
-    List<Articles>? articles,
+    List<Article>? articles,
   }) {
     _status = status;
     _totalResults = totalResults;
@@ -34,13 +34,13 @@ class NewsResponse {
   @JsonKey(name: 'totalResults')
   int? _totalResults;
   @JsonKey(name: 'articles')
-  List<Articles>? _articles;
+  List<Article>? _articles;
 
   String? get status => _status;
 
   int? get totalResults => _totalResults;
 
-  List<Articles>? get articles => _articles;
+  List<Article>? get articles => _articles;
 
   Map<String, dynamic> toJson()=>_$NewsResponseToJson(this);
   // {

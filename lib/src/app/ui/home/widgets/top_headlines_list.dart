@@ -10,7 +10,7 @@ class TopHeadlinesList extends StatelessWidget{
 
   TopHeadlinesList({
     required ScrollController controller,
-    required List<Articles> articlesList,
+    required List<Article> articlesList,
     required bool hasNextPage,
     Key? key,
   })  : _articlesList = articlesList,
@@ -18,7 +18,7 @@ class TopHeadlinesList extends StatelessWidget{
         _hasNextPage = hasNextPage,
         super(key: key);
 
-  final List<Articles> _articlesList;
+  final List<Article> _articlesList;
 
   @override
   build(BuildContext context) {
@@ -29,10 +29,8 @@ class TopHeadlinesList extends StatelessWidget{
             ? _articlesList.length + 1
             : _articlesList.length,
         itemBuilder: (context, pos) => pos >= _articlesList.length
-            ? Align(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+            ? const Align(
+                child: CircularProgressIndicator(),
               )
             : NewsItem(articles: _articlesList[pos]));
   }

@@ -25,25 +25,19 @@ class _CategoryChipListState extends State<CategoryChipList> {
       height: 50,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: AppConstants.NEWS_CATEGORY.length,
+          itemCount: AppConstants.kNewsCategory.length,
           padding: const EdgeInsets.only(left: 10),
           itemBuilder: (context, pos) {
             return Padding(
               padding: const EdgeInsets.only(left: 10),
               child: ChoiceChip(
                 label: Text(
-                  AppConstants.NEWS_CATEGORY[pos],
-                  style: TextStyle(
-                      color: widget.colorScheme.primary,
-                      fontWeight: FontWeight.w900),
-                ),
-                selectedColor: widget.colorScheme.primaryVariant,
+                  AppConstants.kNewsCategory[pos]),
                 selected: this._pos == pos,
-                disabledColor: widget.colorScheme.primaryVariant,
                 onSelected: (selected) {
                   setState(() {
                     this._pos = pos;
-                    widget.categorySelected(AppConstants.NEWS_CATEGORY[pos]);
+                    widget.categorySelected(AppConstants.kNewsCategory[pos]);
                   });
                 },
               ),

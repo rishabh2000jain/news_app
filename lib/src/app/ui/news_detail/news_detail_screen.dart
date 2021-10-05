@@ -11,28 +11,21 @@ class NewsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final args = ModalRoute.of(context)!.settings.arguments as Articles;
+    final theme = Theme.of(context);
+    final args = ModalRoute.of(context)!.settings.arguments as Article;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            iconTheme: IconThemeData(
-              color: colorScheme.primaryVariant, //change your color here
-            ),
             elevation: 0,
-            backgroundColor: colorScheme.primary,
+            //backgroundColor: theme.colorScheme.primary,
             pinned: true,
             snap: false,
             floating: false,
             title: Text(
               args.source?.name ?? '',
-              style: TextStyle(
-                color: colorScheme.primaryVariant,
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              ),
+              style: theme.textTheme.headline5,
             ),
             expandedHeight: size.height * 0.7,
             flexibleSpace: FlexibleSpaceBar(
@@ -52,53 +45,40 @@ class NewsDetailScreen extends StatelessWidget {
             sliver: SliverList(
                 delegate: SliverChildListDelegate.fixed(
               [
-                AppConstants.SPACER_15,
+                AppConstants.kSpacer_15,
                 Text(
                   args.title ?? 'No Title',
-                  style: TextStyle(
-                      color: colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppConstants.TITLE_FONT_SIZE,
-                      fontFamily: AppStrings.PLAYFAIR_DISPLAY_FONT),
+                  style: theme.textTheme.headline5,
                 ),
-                AppConstants.SPACER_10,
+                AppConstants.kSpacer_10,
                 Text(
                   'Author:  ${args.author ?? '___'}',
-                  style: const TextStyle(
-                      fontSize: AppConstants.DESCRIPTION_FONT_SIZE,
+                  style: theme.textTheme.headline6!.copyWith(
                       color: Colors.lightGreen,
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Date:  ${args.publishedAt?.substring(0, 10) ?? '___'}',
-                  style: const TextStyle(
-                      fontSize: AppConstants.DESCRIPTION_FONT_SIZE,
+                  style: theme.textTheme.headline6!.copyWith(
                       color: Colors.lightBlue,
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold),
                 ),
-                AppConstants.SPACER_15,
+                AppConstants.kSpacer_15,
                 Text(
                   '${args.description ?? ''}.',
-                  style: TextStyle(
-                      fontSize: AppConstants.DESCRIPTION_FONT_SIZE,
-                      color: colorScheme.secondaryVariant,
-                      letterSpacing: 1.2),
+                  style: theme.textTheme.bodyText1,
                   textAlign: TextAlign.start,
                 ),
-                AppConstants.SPACER_15,
+                AppConstants.kSpacer_15,
                 Text(
                   '${args.content ?? ''}.',
-                  style: TextStyle(
-                    fontSize: AppConstants.DESCRIPTION_FONT_SIZE,
-                    color: colorScheme.secondaryVariant,
-                    letterSpacing: .8,
-                  ),
+                  style: theme.textTheme.bodyText1,
                   textAlign: TextAlign.justify,
                   overflow: TextOverflow.visible,
                 ),
-                AppConstants.SPACER_15,
+                AppConstants.kSpacer_15,
                 InkWell(
                   child: const Text(
                     'Open In Browser',

@@ -1,13 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paper/src/api_lib/api_response_wraper.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_event.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_state.dart';
 import 'package:paper/src/app/repository/news/api/models/news_response.dart';
 import 'package:paper/src/app/repository/news/news_repository.dart';
 import 'package:paper/src/utils/screen_enum.dart';
 
+import 'home_event.dart';
+import 'home_state.dart';
+
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(const InitialSearchState(Screens.HOME));
+  HomeBloc(InitialSearchState initialSearchState) : super(initialSearchState);
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {

@@ -13,9 +13,9 @@ class NewsRepository {
   NewsRepository() {
     final dio = ServiceManager.get().getDioClient();
     _newsClient = NewsClient(dio);
-
   }
 
+  ///This method returns the top headlines to Bloc.
   Future<ApiResponseWrapper<NewsResponse>> getTopHeadlines(
       {required int page, String? country, String? category}) async {
     NewsResponse response;
@@ -34,12 +34,12 @@ class NewsRepository {
     return ApiResponseWrapper()..data = response;
   }
 
+  ///This method is for searching the news based on passed topic.
   Future<ApiResponseWrapper<NewsResponse>> searchNews(
       {required int page, required String query}) async {
     NewsResponse response;
     try {
-      response = await _newsClient.searchNews(
-          page: page,q: query);
+      response = await _newsClient.searchNews(page: page, q: query);
     } on DioError catch (e) {
       //if the error generated is of type DioError
       _logger.log(Level.INFO, "Exception occurred: searchNews", e);
@@ -51,5 +51,4 @@ class NewsRepository {
     }
     return ApiResponseWrapper()..data = response;
   }
-
 }

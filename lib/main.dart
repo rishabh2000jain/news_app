@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_bloc.dart';
-import 'package:paper/src/app/bloc/search/news_search_bloc.dart';
+import 'package:paper/src/app/bloc/home/home_bloc.dart';
+import 'package:paper/src/app/bloc/home/home_state.dart';
 import 'package:paper/src/app/bloc/theme/theme_bloc.dart';
 import 'package:paper/src/app/bloc/theme/theme_state.dart';
 import 'package:paper/src/navigation/routes.dart';
-import 'package:paper/src/resources/values/app_colors.dart';
+import 'package:paper/src/resources/style/themes.dart';
+import 'package:paper/src/shared_preference/app_preference.dart';
+import 'package:paper/src/utils/screen_enum.dart';
 
-void main() {
+void main() async {
+  /// [WidgetsFlutterBinding.ensureInitialized()] makes sure that we have an instance of the WidgetsBinding,
+  /// which is required to use platform channels to call the native code.
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppPreferences.init();
   return runApp(MyApp());
 }
 
@@ -15,61 +21,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => HomeBloc()),
-      BlocProvider(create: (context) => NewsSearchBloc()),
-      BlocProvider(create: (context) => ThemeBloc()),
+      BlocProvider(create: (context) => HomeBloc(const InitialSearchState(Screens.HOME))),
+      BlocProvider(
+          create: (context) => ThemeBloc(AppPreferences.getThemeDetail())),
     ], child: MaterialAppWidget());
   }
 }
 
-class MaterialAppWidget extends StatefulWidget {
-  const MaterialAppWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<MaterialAppWidget> createState() => _MaterialAppWidgetState();
-}
-
-class _MaterialAppWidgetState extends State<MaterialAppWidget> {
-  late ThemeBloc _themeBloc;
-
-  @override
-  void initState() {
-    _themeBloc = BlocProvider.of<ThemeBloc>(context, listen: false);
-    super.initState();
-  }
-
+class MaterialAppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
-        bloc: _themeBloc,
         builder: (BuildContext context, ThemeState state) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: AppColor.whiteColor,
-              colorScheme: const ColorScheme.light(
-                  background: AppColor.dullWhite,
-                  primary: AppColor.whiteColor,
-                  primaryVariant: AppColor.blackVariant,
-                  secondary: AppColor.blackVariant,
-                  secondaryVariant: AppColor.blackLight),
-            ),
-            darkTheme: ThemeData.dark().copyWith(
-              scaffoldBackgroundColor: AppColor.blackVariant,
-              colorScheme: const ColorScheme.dark(
-                primary: AppColor.blackLight,
-                primaryVariant: AppColor.whiteColor,
-                background: AppColor.blackVariant,
-                secondary: AppColor.grey,
-                secondaryVariant: AppColor.whiteColor,
-              ),
-            ),
-            initialRoute: Routes.kHomeScreen,
-            routes: Routes.routes,
-            themeMode: state.theme,
-          );
-        });
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppThemes.getLightTheme(),
+        darkTheme: AppThemes.getDarkTheme(),
+        initialRoute: Routes.kHomeScreen,
+        routes: Routes.routes,
+        themeMode: state.theme,
+      );
+    });
   }
 }

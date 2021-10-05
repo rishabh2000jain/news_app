@@ -1,20 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paper/src/api_lib/api_response_wraper.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_state.dart';
+import 'package:paper/src/app/bloc/home/home_state.dart';
 import 'package:paper/src/app/bloc/search/search_event.dart';
 import 'package:paper/src/app/repository/news/api/models/news_response.dart';
 import 'package:paper/src/app/repository/news/news_repository.dart';
 import 'package:paper/src/utils/screen_enum.dart';
 
 class NewsSearchBloc extends Bloc<SearchEvent, HomeState> {
-  NewsSearchBloc() : super(const InitialSearchState(Screens.SEARCH));
+  NewsSearchBloc(InitialSearchState initialSearchState) : super(initialSearchState);
 
   @override
   Stream<HomeState> mapEventToState(SearchEvent event) async* {
     yield const LoadingSearchState(Screens.SEARCH);
     if (event is SearchModule) {
       try {
-        final ApiResponseWrapper<NewsResponse> searchResponse =
+        ApiResponseWrapper<NewsResponse> searchResponse =
             await NewsRepository()
                 .searchNews(page: event.page, query: event.query);
         if (searchResponse.data == null ||
@@ -30,4 +30,5 @@ class NewsSearchBloc extends Bloc<SearchEvent, HomeState> {
       }
     }
   }
+
 }

@@ -5,14 +5,11 @@ class SearchView extends StatefulWidget {
   final Function searchData;
   const SearchView({
     required this.size,
-    required this.colorScheme,
     required this.searchData,
     Key? key
   })  :super(key: key);
 
   final Size size;
-  final colorScheme;
-
   @override
   State<SearchView> createState() => _SearchViewState();
 }
@@ -22,15 +19,16 @@ class _SearchViewState extends State<SearchView> {
   final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return SizedBox(
       width: widget.size.width * 0.9,
       height: widget.size.width * 0.2,
       child: TextField(
         controller: _controller,
-        cursorColor: widget.colorScheme.primaryVariant,
+        cursorColor: theme.primaryVariant,
         decoration: InputDecoration(
           hintStyle: TextStyle(
-            color: widget.colorScheme.primaryVariant,
+            color: theme.primaryVariant,
           ),
           hintText: 'Search Here',
           prefixIcon: _isFocused
@@ -46,7 +44,7 @@ class _SearchViewState extends State<SearchView> {
                   },
                   icon: Icon(
                     Icons.clear,
-                    color: widget.colorScheme.primaryVariant,
+                    color: theme.primaryVariant,
                     size: 20,
                   ),
                 )

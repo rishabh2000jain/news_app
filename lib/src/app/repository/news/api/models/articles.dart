@@ -4,8 +4,8 @@ import 'package:paper/src/app/repository/news/api/models/source.dart';
 part 'articles.g.dart';
 
 @JsonSerializable()
-class Articles {
-  Articles({
+class Article {
+  Article({
     Source? source,
     String? author,
     String? title,
@@ -25,7 +25,7 @@ class Articles {
     _content = content;
   }
 
- factory Articles.fromJson(dynamic json) => _$ArticlesFromJson(json);
+ factory Article.fromJson(dynamic json) => _$ArticlesFromJson(json);
 
   //  {
   //   _source = json['source'] != null ? Source.fromJson(json['source']) : null;

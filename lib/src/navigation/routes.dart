@@ -9,8 +9,8 @@ class Routes {
   static const kNewsDetailScreen = '/news_detail';
   static const kNewsSearchScreen = '/news_search';
   static final routes = <String,WidgetBuilder>{
-    kHomeScreen:(context)=>HomeScreen(),
-    kNewsDetailScreen:(context)=>const NewsDetailScreen(),
-    kNewsSearchScreen:(context)=> NewsSearchScreen()
+    kHomeScreen:(context)=>const HomeScreen(),
+    kNewsDetailScreen:(context)=> const NewsDetailScreen(),
+    kNewsSearchScreen:(context)=> const NewsSearchScreen()
   };
 }

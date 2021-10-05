@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_state.dart';
+import 'package:paper/src/app/bloc/home/home_state.dart';
 import 'package:paper/src/app/bloc/search/news_search_bloc.dart';
 import 'package:paper/src/app/bloc/search/search_event.dart';
 import 'package:paper/src/app/repository/news/api/models/articles.dart';
-import 'package:paper/src/app/ui/search/widgets/search_list.dart';
+import 'package:paper/src/app/ui/search/widgets/search_news_list.dart';
 import 'package:paper/src/app/ui/search/widgets/search_view.dart';
 import 'package:paper/src/constants/app_constants.dart';
 import 'package:paper/src/resources/strings/app_strings.dart';
@@ -19,7 +19,7 @@ class NewsSearchScreen extends StatefulWidget {
 }
 
 class _NewsSearchScreenState extends State<NewsSearchScreen> {
-  List<Articles> _articles = [];
+  final List<Article> _articles = [];
   late NewsSearchBloc _newsSearchBloc;
   int _currentPage = 1;
   late ScrollController _controller;
@@ -31,15 +31,9 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   @override
   void initState() {
     _controller = ScrollController();
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    _isNextPage = true;
     _controller.addListener(_listenScroll);
-    _newsSearchBloc = BlocProvider.of<NewsSearchBloc>(context,listen: false);
-    super.didChangeDependencies();
+    _newsSearchBloc = NewsSearchBloc(const InitialSearchState(Screens.SEARCH));
+    super.initState();
   }
 
   void _makeApiCall(String query) {
@@ -53,65 +47,75 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   void _listenScroll() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         _isNextPage &&
-        _newsSearchBloc.state is! LoadingSearchState) {
-      _newsSearchBloc.add(SearchModule(page: ++_currentPage, query: _query));
+        (_newsSearchBloc.state is! LoadingSearchState &&
+            _newsSearchBloc.state.screens == Screens.SEARCH)) {
+      _currentPage += 1;
+      _newsSearchBloc.add(SearchModule(page: _currentPage, query: _query));
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _articles.clear();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            AppConstants.SPACER_15,
+            AppConstants.kSpacer_15,
             Center(
               child: SearchView(
-                  searchData: _makeApiCall,
-                  size: size,
-                  colorScheme: colorScheme),
+                searchData: _makeApiCall,
+                size: size,
+              ),
             ),
             BlocBuilder<NewsSearchBloc, HomeState>(
-
+              buildWhen: (context, state) {
+                return state.screens == Screens.SEARCH;
+              },
               bloc: _newsSearchBloc,
               builder: (context, state) {
-                   print('from search');
                 if (state is InitialSearchState) {
                   return Container();
                 } else if (state is LoadedSearchState) {
                   final data = state.searchResponse.data!;
-                  _articles += data.articles!;
+                  _articles.addAll(data.articles!);
                   if (data.totalResults! > _articles.length) {
                     _isNextPage = true;
                   } else {
-                    _isNextPage = true;
+                    _isNextPage = false;
                   }
                   return SearchList(
                       controller: _controller,
                       articles: _articles,
                       hasNext: _isNextPage,
-                      colorScheme: colorScheme);
+                      theme: theme);
                 } else if (state is LoadingSearchState) {
                   return _articles.isEmpty
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: colorScheme.primaryVariant,
-                          ),
+                      ? const Center(
+                          child: CircularProgressIndicator(),
                         )
                       : SearchList(
                           controller: _controller,
                           articles: _articles,
-                          colorScheme: colorScheme,
+                          theme: theme,
                           hasNext: _isNextPage,
                         );
                 } else if (state is SearchApiErrorState ||
                     state is SearchErrorState) {
-                  return Center(
-                    child: Image.asset(
-                      AppStrings.PageNotFoundImage,
-                      fit: BoxFit.fitWidth,
+                  return Expanded(
+                    child: SingleChildScrollView(
+                      child: Image.asset(
+                        AppStrings.PageNotFoundImage,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                   );
                 }

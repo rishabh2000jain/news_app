@@ -2,29 +2,36 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_bloc.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_event.dart';
-import 'package:paper/src/app/bloc/news_search/home/home_state.dart';
+import 'package:paper/src/app/bloc/home/home_bloc.dart';
+import 'package:paper/src/app/bloc/home/home_event.dart';
+import 'package:paper/src/app/bloc/home/home_state.dart';
 import 'package:paper/src/app/bloc/theme/theme_bloc.dart';
 import 'package:paper/src/app/bloc/theme/theme_event.dart';
+import 'package:paper/src/app/bloc/theme/theme_state.dart';
 import 'package:paper/src/app/repository/news/api/models/articles.dart';
 import 'package:paper/src/app/repository/news/api/models/news_response.dart';
+import 'package:paper/src/app/ui/home/widgets/country_grid.dart';
 import 'package:paper/src/app/ui/home/widgets/news_category_chips.dart';
 import 'package:paper/src/app/ui/home/widgets/top_headlines_list.dart';
+import 'package:paper/src/constants/app_constants.dart';
 import 'package:paper/src/navigation/app_router.dart';
 import 'package:paper/src/resources/strings/app_strings.dart';
+import 'package:paper/src/shared_preference/app_preference.dart';
 import 'package:paper/src/utils/screen_enum.dart';
-import 'package:paper/src/utils/themes.dart';
+import 'package:paper/src/utils/themes_enum.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   //holds the article list
-  late List<Articles> _articlesList = [];
+  late List<Article> _articlesList = [];
   late ThemeBloc _themeBloc;
 
   ///holds the instance of [HomeBloc]
@@ -33,13 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ///For listening the scroll in [ListView]
   late final ScrollController _controller;
 
+  ///this variable is for pagination in application it is used loads next page if available
   int _page = 1;
 
+  ///keep track of next page availability
   bool _isNextPage = true;
 
   String _category = 'general';
 
-  String _country = 'in';
+  //used for selection of country
+  String? _countryName;
+  int _countryPos = 23;
 
   @override
   void initState() {
@@ -49,13 +60,18 @@ class _HomeScreenState extends State<HomeScreen> {
     _controller.addListener(_scrollListener);
     //listener attached to controller
     _themeBloc = BlocProvider.of<ThemeBloc>(context, listen: false);
+    _homeBloc = BlocProvider.of<HomeBloc>(context, listen: false);
+
+    _countryPos = AppPreferences.getCountry();
+    _countryName = AppConstants.kCountry[_countryPos];
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    _homeBloc = BlocProvider.of<HomeBloc>(context, listen: false);
-    super.didChangeDependencies();
+  ///clears list and assign page to 1
+  void _resetApiParam() {
+    _isNextPage = true;
+    _page = 1;
+    _articlesList.clear();
   }
 
   @override
@@ -67,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         _isNextPage &&
+        _homeBloc.state.screens == Screens.HOME &&
         _homeBloc.state is! LoadingSearchState) {
       _makeApiCall();
     }
@@ -74,70 +91,88 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //method to add search event to bloc
   void _makeApiCall() {
-    _homeBloc
-        .add(HomeModule(page: _page, category: _category, country: _country));
+    _homeBloc.add(
+        HomeModule(page: _page, category: _category, country: _countryName));
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          AppStrings.APP_NAME_STRING,
-          style: TextStyle(
-              color: colorScheme.primaryVariant,
-              fontWeight: FontWeight.w900,
-              fontSize: 23,
-              fontFamily: AppStrings.PLAYFAIR_DISPLAY_FONT),
-        ),
+        title:
+            Text(AppStrings.APP_NAME_STRING, style: theme.textTheme.headline5),
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
               onPressed: () {
                 AppRouter.moveToNewsSearchScreen(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.search,
-                color: colorScheme.primaryVariant,
-                size: 30,
               )),
+          //it is used to select country
+          IconButton(
+            icon: const Icon(Icons.flag),
+            onPressed: () async {
+              await showModalBottomSheet<int>(
+                context: context,
+                isDismissible: true,
+                builder: (context) {
+                  return const CountryListWidget();
+                },
+              ).then(
+                (value) {
+                  if (value != null && value != _countryPos) {
+                    _countryPos = value;
+                    _countryName = AppConstants.kCountry[_countryPos];
+                    _resetApiParam();
+                    _makeApiCall();
+                  }
+                },
+              );
+            },
+          ),
+          //for theme selection
           PopupMenuButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.wb_sunny,
-              color: colorScheme.primaryVariant,
+              size: 30,
             ),
-            onSelected: (AppThemes theme) {
+            onSelected: (AppThemeOption theme) {
               switch (theme) {
-                case AppThemes.LIGHT:
+                case AppThemeOption.LIGHT:
                   _themeBloc.add(const AppThemeModel(theme: ThemeMode.light));
                   break;
-                case AppThemes.DARK:
+                case AppThemeOption.DARK:
                   _themeBloc.add(const AppThemeModel(theme: ThemeMode.dark));
                   break;
-                case AppThemes.SYSTEM:
+                case AppThemeOption.SYSTEM:
                   _themeBloc.add(const AppThemeModel(theme: ThemeMode.system));
                   break;
               }
             },
             itemBuilder: (BuildContext context) {
+              ThemeState state = AppPreferences.getThemeDetail();
               return [
-                const PopupMenuItem(
-                  child: Text('Light Theme'),
-                  value: AppThemes.LIGHT,
+                PopupMenuItem(
+                  enabled: !(state.theme == ThemeMode.light),
+                  child: const Text('Light Theme'),
+                  value: AppThemeOption.LIGHT,
                 ),
-                const PopupMenuItem(
-                  child: Text('Dark Theme'),
-                  value: AppThemes.DARK,
+                PopupMenuItem(
+                  child: const Text('Dark Theme'),
+                  enabled: !(state.theme == ThemeMode.dark),
+                  value: AppThemeOption.DARK,
                 ),
-                const PopupMenuItem(
-                    child: Text('System Theme'), value: AppThemes.SYSTEM),
+                PopupMenuItem(
+                    enabled: !(state.theme == ThemeMode.system),
+                    child: const Text('System Theme'),
+                    value: AppThemeOption.SYSTEM),
               ];
             },
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -151,15 +186,13 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(left: 5, bottom: 10),
               child: Text(
                 AppStrings.CATEGORY_STRING,
-                style: TextStyle(
-                    color: colorScheme.primaryVariant,
-                    fontWeight: FontWeight.bold),
+                style: theme.textTheme.bodyText2,
                 textAlign: TextAlign.left,
               ),
             ),
             //CategoryChipList is a list of chips so that user can select category
             CategoryChipList(
-              colorScheme: colorScheme,
+              colorScheme: theme.colorScheme,
               categorySelected: (category) {
                 _isNextPage = true;
                 _page = 1;
@@ -172,17 +205,16 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(left: 5, bottom: 10, top: 10),
               child: Text(
                 AppStrings.TOP_HEADLINE_STRING,
-                style: TextStyle(
-                  color: colorScheme.primaryVariant,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: theme.textTheme.bodyText2,
                 textAlign: TextAlign.left,
               ),
             ),
             BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (context, state) {
+                return state.screens == Screens.HOME;
+              },
               bloc: _homeBloc,
               builder: (context, homeState) {
-                if (homeState.screens != Screens.HOME) return Container();
                 if (homeState is InitialSearchState) {
                   _makeApiCall();
                   return Container();
@@ -203,10 +235,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ));
                 } else if (homeState is LoadingSearchState) {
                   return _articlesList.isEmpty
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: colorScheme.primaryVariant,
-                          ),
+                      ? const Center(
+                          child: CircularProgressIndicator(),
                         )
                       : Expanded(
                           child: TopHeadlinesList(
@@ -214,22 +244,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           articlesList: _articlesList,
                           hasNextPage: _isNextPage,
                         ));
-                }
-                else if (homeState is SearchApiErrorState) {
-                  return Center(
-                    child: Image.asset(
+                } else if (homeState is SearchApiErrorState ||
+                    homeState is SearchErrorState) {
+                  _resetApiParam();
+                  return Column(children: [
+                    Image.asset(
                       AppStrings.PageNotFoundImage,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fill,
                     ),
-                  );
-                }
-                else if (homeState is SearchErrorState) {
-                  return Center(
-                    child: Image.asset(
-                      AppStrings.PageNotFoundImage,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  );
+                    TextButton(
+                        onPressed: () {
+                          _makeApiCall();
+                        },
+                        child: const Text('Refresh',))
+                  ]);
                 }
                 return Container();
               },

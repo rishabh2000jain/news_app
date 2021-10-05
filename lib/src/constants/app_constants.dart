@@ -1,28 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
 class AppConstants {
-  static const EDGE_INSETS_10 = EdgeInsets.all(10);
-  static const BORDER_RADIUS = BorderRadius.all(Radius.circular(20));
-  static const SEARCH_VIEW_HEIGHT = 45.0;
-  static const CHIP_PADDING =
+  static const kEdgeIsets10 = EdgeInsets.all(10);
+  static const kBorderRadius = BorderRadius.all(Radius.circular(20));
+  static const kSearchViewHeight = 45.0;
+  static const kChipPadding =
       EdgeInsets.symmetric(vertical: 10, horizontal: 18);
-  static const CHIP_TEXT_STYLE = TextStyle(
-    //color: AppColor.buttonTextAndIconColor,
-    fontSize: 18,
-    fontWeight: FontWeight.w900,
-  );
-
-  static const SEARCH_BAR_FONT_SIZE = 23.0;
-  static const DESCRIPTION_FONT_SIZE = 22.0;
-  static const TITLE_FONT_SIZE = 25.0;
-  static const SPACER_10 = SizedBox(
+  static const kSearchBarFontSize = 23.0;
+  static const kTitleFontSize = 25.0;
+  static const kSpacer_10 = SizedBox(
     height: 10,
   );
-  static const SPACER_15 = SizedBox(
+  static const kSpacer_15 = SizedBox(
     height: 15,
   );
 
-  static const NEWS_CATEGORY = [
+  static const kNewsCategory = [
     'General',
     'Business',
     'Entertainment',
@@ -30,5 +23,62 @@ class AppConstants {
     'Science',
     'Sports',
     'Technology'
+  ];
+
+  static const kCountry = [
+    'ae',
+    'ar',
+    'at',
+    'au',
+    'be',
+    'bg',
+    'br',
+    'ca',
+    'ch',
+    'cn',
+    'co',
+    'cu',
+    'cz',
+    'de',
+    'eg',
+    'fr',
+    'gb',
+    'gr',
+    'hk',
+    'hu',
+    'id',
+    'ie',
+    'il',
+    'in',
+    'it',
+    'jp',
+    'kr',
+    'lt',
+    'lv',
+    'ma',
+    'mx',
+    'my',
+    'ng',
+    'nl',
+    'no',
+    'nz',
+    'ph',
+    'pl',
+    'pt',
+    'ro',
+    'rs',
+    'ru',
+    'sa',
+    'se',
+    'sg',
+    'si',
+    'sk',
+    'th',
+    'tr',
+    'tw',
+    'ua',
+    'us',
+    've',
+    'za'
   ];
 }

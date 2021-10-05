@@ -11,7 +11,7 @@ NewsResponse _$NewsResponseFromJson(Map<String, dynamic> json) {
     status: json['status'] as String?,
     totalResults: json['totalResults'] as int?,
     articles: (json['articles'] as List<dynamic>?)
-        ?.map((e) => Articles.fromJson(e))
+        ?.map((e) => Article.fromJson(e))
         .toList(),
   );
 }
