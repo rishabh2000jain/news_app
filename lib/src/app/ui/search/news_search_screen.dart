@@ -9,7 +9,6 @@ import 'package:paper/src/app/ui/search/widgets/search_view.dart';
 import 'package:paper/src/constants/app_constants.dart';
 import 'package:paper/src/resources/strings/app_strings.dart';
 import 'package:paper/src/utils/app_util.dart';
-import 'package:paper/src/utils/screen_enum.dart';
 
 class NewsSearchScreen extends StatefulWidget {
   const NewsSearchScreen({Key? key}) : super(key: key);
@@ -32,7 +31,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   void initState() {
     _controller = ScrollController();
     _controller.addListener(_listenScroll);
-    _newsSearchBloc = NewsSearchBloc(const InitialSearchState(Screens.SEARCH));
+    _newsSearchBloc = NewsSearchBloc(const InitialSearchState());
     super.initState();
   }
 
@@ -47,9 +46,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   void _listenScroll() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         _isNextPage &&
-        (_newsSearchBloc.state is! LoadingSearchState &&
-            _newsSearchBloc.state.screens == Screens.SEARCH)) {
-      _currentPage += 1;
+        _newsSearchBloc.state is! LoadingSearchState) {
       _newsSearchBloc.add(SearchModule(page: _currentPage, query: _query));
     }
   }
@@ -58,7 +55,14 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   void dispose() {
     _controller.dispose();
     _articles.clear();
+    _newsSearchBloc.close();
     super.dispose();
+  }
+
+  void _resetApiParams() {
+    _currentPage = 1;
+    _isNextPage = true;
+    _articles.clear();
   }
 
   @override
@@ -72,22 +76,27 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
             AppConstants.kSpacer_15,
             Center(
               child: SearchView(
-                searchData: _makeApiCall,
+                searchData: (query) {
+                  _resetApiParams();
+                  _makeApiCall(query);
+                },
                 size: size,
               ),
             ),
             BlocBuilder<NewsSearchBloc, HomeState>(
-              buildWhen: (context, state) {
-                return state.screens == Screens.SEARCH;
-              },
+              // buildWhen: (context, state) {
+              //   return state.screens == Screens.SEARCH;
+              // },
               bloc: _newsSearchBloc,
               builder: (context, state) {
+                print('search');
                 if (state is InitialSearchState) {
                   return Container();
                 } else if (state is LoadedSearchState) {
                   final data = state.searchResponse.data!;
                   _articles.addAll(data.articles!);
                   if (data.totalResults! > _articles.length) {
+                    _currentPage += 1;
                     _isNextPage = true;
                   } else {
                     _isNextPage = false;
@@ -110,6 +119,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
                         );
                 } else if (state is SearchApiErrorState ||
                     state is SearchErrorState) {
+                  _resetApiParams();
                   return Expanded(
                     child: SingleChildScrollView(
                       child: Image.asset(

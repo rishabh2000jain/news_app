@@ -2,8 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paper/src/api_lib/api_response_wraper.dart';
 import 'package:paper/src/app/repository/news/api/models/news_response.dart';
 import 'package:paper/src/app/repository/news/news_repository.dart';
-import 'package:paper/src/utils/screen_enum.dart';
-
 import 'home_event.dart';
 import 'home_state.dart';
 
@@ -12,7 +10,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    yield const LoadingSearchState(Screens.HOME);
+    yield const LoadingSearchState();
     if (event is HomeModule) {
       try {
         final ApiResponseWrapper<NewsResponse> searchResponse =
@@ -22,14 +20,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 country: event.country?.toLowerCase() ?? 'in');
         if (searchResponse.data == null ||
             searchResponse.data!.status == 'error') {
-          yield SearchErrorState(searchResponse.getException,Screens.HOME);
+          yield SearchErrorState(searchResponse.getException);
         } else {
-          yield LoadedSearchState(searchResponse,Screens.HOME);
+          yield LoadedSearchState(searchResponse);
         }
       } on NullThrownError {
-        yield const SearchApiErrorState(null,Screens.HOME);
+        yield const SearchApiErrorState(null);
       } catch (e) {
-        yield const SearchApiErrorState(null,Screens.HOME);
+        yield const SearchApiErrorState(null);
       }
     }
   }

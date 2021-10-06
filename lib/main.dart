@@ -7,7 +7,6 @@ import 'package:paper/src/app/bloc/theme/theme_state.dart';
 import 'package:paper/src/navigation/routes.dart';
 import 'package:paper/src/resources/style/themes.dart';
 import 'package:paper/src/shared_preference/app_preference.dart';
-import 'package:paper/src/utils/screen_enum.dart';
 
 void main() async {
   /// [WidgetsFlutterBinding.ensureInitialized()] makes sure that we have an instance of the WidgetsBinding,
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(create: (context) => HomeBloc(const InitialSearchState(Screens.HOME))),
+      BlocProvider(create: (context) => HomeBloc(const InitialSearchState())),
       BlocProvider(
           create: (context) => ThemeBloc(AppPreferences.getThemeDetail())),
     ], child: MaterialAppWidget());

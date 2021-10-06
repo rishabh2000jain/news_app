@@ -19,7 +19,6 @@ import 'package:paper/src/constants/app_constants.dart';
 import 'package:paper/src/navigation/app_router.dart';
 import 'package:paper/src/resources/strings/app_strings.dart';
 import 'package:paper/src/shared_preference/app_preference.dart';
-import 'package:paper/src/utils/screen_enum.dart';
 import 'package:paper/src/utils/themes_enum.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -83,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         _isNextPage &&
-        _homeBloc.state.screens == Screens.HOME &&
         _homeBloc.state is! LoadingSearchState) {
       _makeApiCall();
     }
@@ -210,11 +208,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             BlocBuilder<HomeBloc, HomeState>(
-              buildWhen: (context, state) {
-                return state.screens == Screens.HOME;
-              },
+              // buildWhen: (context, state) {
+              //   return state.screens == Screens.HOME;
+              // },
               bloc: _homeBloc,
               builder: (context, homeState) {
+                print('home');
                 if (homeState is InitialSearchState) {
                   _makeApiCall();
                   return Container();
@@ -253,10 +252,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       fit: BoxFit.fill,
                     ),
                     TextButton(
-                        onPressed: () {
-                          _makeApiCall();
-                        },
-                        child: const Text('Refresh',))
+                      onPressed: () {
+                        _makeApiCall();
+                      },
+                      child: const Text(
+                        'Refresh',
+                      ),
+                    )
                   ]);
                 }
                 return Container();

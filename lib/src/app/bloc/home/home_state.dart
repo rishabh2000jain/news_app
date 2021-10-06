@@ -2,22 +2,20 @@
 import 'package:paper/src/api_lib/api_exception.dart';
 import 'package:paper/src/api_lib/api_response_wraper.dart';
 import 'package:paper/src/app/repository/news/api/models/news_response.dart';
-import 'package:paper/src/utils/screen_enum.dart';
 
 abstract class HomeState {
-  final Screens screens;
-  const HomeState(this.screens);
+  const HomeState();
 }
 
 class InitialSearchState extends HomeState {
-  const InitialSearchState(Screens screens):super(screens);
+  const InitialSearchState():super();
 
   @override
   List<Object> get props => [];
 }
 
 class LoadingSearchState extends HomeState {
-  const LoadingSearchState(Screens screens):super(screens);
+  const LoadingSearchState():super();
 
   @override
   List<Object> get props => [];
@@ -26,7 +24,7 @@ class LoadingSearchState extends HomeState {
 class LoadedSearchState extends HomeState {
   final ApiResponseWrapper<NewsResponse> searchResponse;
 
-  const LoadedSearchState(this.searchResponse,Screens screens):super(screens);
+  const LoadedSearchState(this.searchResponse):super();
 
   @override
   List<Object> get props => [searchResponse];
@@ -35,7 +33,7 @@ class LoadedSearchState extends HomeState {
 class SearchApiErrorState extends HomeState {
   final NullThrownError? error;
 
-  const SearchApiErrorState(this.error,Screens screens):super(screens);
+  const SearchApiErrorState(this.error):super();
 
   @override
   List<Object?> get props => [error];
@@ -44,7 +42,7 @@ class SearchApiErrorState extends HomeState {
 class SearchErrorState extends HomeState {
   final ServerError? error;
 
-  const SearchErrorState(this.error,Screens screens):super(screens);
+  const SearchErrorState(this.error):super();
 
   @override
   List<Object?> get props => [error];
