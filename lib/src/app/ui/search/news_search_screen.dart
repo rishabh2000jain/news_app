@@ -21,17 +21,19 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   final List<Article> _articles = [];
   late NewsSearchBloc _newsSearchBloc;
   int _currentPage = 1;
-  late ScrollController _controller;
+  late ScrollController _scrollController;
 
   bool _isNextPage = true;
 
   String _query = '';
+  late TextEditingController _searchViewController;
 
   @override
   void initState() {
-    _controller = ScrollController();
-    _controller.addListener(_listenScroll);
+    _scrollController = ScrollController();
+    _scrollController.addListener(_listenScroll);
     _newsSearchBloc = NewsSearchBloc(const InitialSearchState());
+    _searchViewController = TextEditingController();
     super.initState();
   }
 
@@ -44,7 +46,8 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
   }
 
   void _listenScroll() {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent &&
         _isNextPage &&
         _newsSearchBloc.state is! LoadingSearchState) {
       _newsSearchBloc.add(SearchModule(page: _currentPage, query: _query));
@@ -53,7 +56,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _scrollController.dispose();
     _articles.clear();
     _newsSearchBloc.close();
     super.dispose();
@@ -75,21 +78,35 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
           children: [
             AppConstants.kSpacer_15,
             Center(
-              child: SearchView(
-                searchData: (query) {
-                  _resetApiParams();
-                  _makeApiCall(query);
-                },
-                size: size,
-              ),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SearchView(
+                      searchData: (query) {
+                        _resetApiParams();
+                        _makeApiCall(query);
+                      },
+                      size: size,
+                      textController: _searchViewController,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                         FocusScope.of(context).unfocus();
+                         _resetApiParams();
+                         _makeApiCall(_searchViewController.text);
+                      },
+                      child: const Text(
+                        'Search',
+                        style: TextStyle(color: Colors.redAccent, fontSize: 17),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ]),
             ),
             BlocBuilder<NewsSearchBloc, HomeState>(
-              // buildWhen: (context, state) {
-              //   return state.screens == Screens.SEARCH;
-              // },
               bloc: _newsSearchBloc,
               builder: (context, state) {
-                print('search');
                 if (state is InitialSearchState) {
                   return Container();
                 } else if (state is LoadedSearchState) {
@@ -102,7 +119,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
                     _isNextPage = false;
                   }
                   return SearchList(
-                      controller: _controller,
+                      controller: _scrollController,
                       articles: _articles,
                       hasNext: _isNextPage,
                       theme: theme);
@@ -112,7 +129,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
                           child: CircularProgressIndicator(),
                         )
                       : SearchList(
-                          controller: _controller,
+                          controller: _scrollController,
                           articles: _articles,
                           theme: theme,
                           hasNext: _isNextPage,
@@ -123,7 +140,7 @@ class _NewsSearchScreenState extends State<NewsSearchScreen> {
                   return Expanded(
                     child: SingleChildScrollView(
                       child: Image.asset(
-                        AppStrings.PageNotFoundImage,
+                        AppStrings.kPageNotFoundImage,
                         fit: BoxFit.fitWidth,
                       ),
                     ),

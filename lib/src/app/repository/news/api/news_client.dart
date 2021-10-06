@@ -6,7 +6,7 @@ import '../api/models/news_response.dart';
 
 part 'news_client.g.dart';
 
-@RestApi(baseUrl: AppStrings.BASE_URL)
+@RestApi(baseUrl: AppStrings.kBaseUrl)
 abstract class NewsClient {
   factory NewsClient(Dio dio) => _NewsClient(dio);
 

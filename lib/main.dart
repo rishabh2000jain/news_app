@@ -11,23 +11,29 @@ import 'package:paper/src/shared_preference/app_preference.dart';
 void main() async {
   /// [WidgetsFlutterBinding.ensureInitialized()] makes sure that we have an instance of the WidgetsBinding,
   /// which is required to use platform channels to call the native code.
+
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreferences.init();
-  return runApp(MyApp());
+  return runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) => HomeBloc(const InitialSearchState())),
       BlocProvider(
           create: (context) => ThemeBloc(AppPreferences.getThemeDetail())),
-    ], child: MaterialAppWidget());
+    ], child: const MaterialAppWidget());
   }
 }
 
 class MaterialAppWidget extends StatelessWidget {
+  const MaterialAppWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(

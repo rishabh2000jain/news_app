@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text(AppStrings.APP_NAME_STRING, style: theme.textTheme.headline5),
+            Text(AppStrings.kAppNameString, style: theme.textTheme.headline5),
         elevation: 0,
         centerTitle: true,
         actions: [
@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 5, bottom: 10),
               child: Text(
-                AppStrings.CATEGORY_STRING,
+                AppStrings.kCategoryString,
                 style: theme.textTheme.bodyText2,
                 textAlign: TextAlign.left,
               ),
@@ -202,18 +202,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 5, bottom: 10, top: 10),
               child: Text(
-                AppStrings.TOP_HEADLINE_STRING,
+                AppStrings.kTopHeadlinesString,
                 style: theme.textTheme.bodyText2,
                 textAlign: TextAlign.left,
               ),
             ),
             BlocBuilder<HomeBloc, HomeState>(
-              // buildWhen: (context, state) {
-              //   return state.screens == Screens.HOME;
-              // },
               bloc: _homeBloc,
               builder: (context, homeState) {
-                print('home');
                 if (homeState is InitialSearchState) {
                   _makeApiCall();
                   return Container();
@@ -248,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _resetApiParam();
                   return Column(children: [
                     Image.asset(
-                      AppStrings.PageNotFoundImage,
+                      AppStrings.kPageNotFoundImage,
                       fit: BoxFit.fill,
                     ),
                     TextButton(

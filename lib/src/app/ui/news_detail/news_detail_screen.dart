@@ -30,10 +30,10 @@ class NewsDetailScreen extends StatelessWidget {
             expandedHeight: size.height * 0.7,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.network(
-                '${AppUtil.isStringEmpty(args.urlToImage ?? '') ? AppStrings.BrokenImage : args.urlToImage}',
+                '${AppUtil.isStringEmpty(args.urlToImage ?? '') ? AppStrings.kBrokenImage : args.urlToImage}',
                 errorBuilder: (context, _, stack) {
                   return Image.asset(
-                    AppStrings.BrokenImage,
+                    AppStrings.kBrokenImage,
                   );
                 },
                 fit: BoxFit.fill,

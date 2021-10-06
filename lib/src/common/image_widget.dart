@@ -15,7 +15,7 @@ class CommonImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.network(
       AppUtil.isStringEmpty(imageUrl ?? '')
-          ? AppStrings.BrokenImage
+          ? AppStrings.kBrokenImage
           : imageUrl!,
       height: height,
       width: width,
@@ -35,7 +35,7 @@ class CommonImageView extends StatelessWidget {
       },
       errorBuilder: (context, obj, stack) {
         return Image.asset(
-          AppStrings.BrokenImage,
+          AppStrings.kBrokenImage,
           height: 300.0,
           fit: BoxFit.fill,
         );

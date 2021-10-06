@@ -7,7 +7,7 @@ import 'package:paper/src/resources/strings/app_strings.dart';
 class ServiceManager {
   static ServiceManager? _serviceManager;
   static final Map<String, String> _defaultHeaders = {
-    AppStrings.X_API_KEY_HEADER_KEY: AppStrings.API_KEY,
+    AppStrings.kXApiKey: AppStrings.kApiKey,
   };
   ServiceManager._instance();
   /// Method to get Singleton instance of the class
@@ -24,7 +24,7 @@ class ServiceManager {
     hashMap['Accept'] = 'application/json; charset=utf-8';
     _defaultHeaders.addAll(hashMap);
     dio
-      ..options.baseUrl = AppStrings.BASE_URL
+      ..options.baseUrl = AppStrings.kBaseUrl
       ..options.headers = _defaultHeaders;
 
     dio.interceptors.add(LogInterceptor(

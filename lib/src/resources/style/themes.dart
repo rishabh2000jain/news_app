@@ -30,7 +30,7 @@ class AppThemes {
         headline5: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w900,
-            fontFamily: AppStrings.PLAYFAIR_DISPLAY_FONT),
+            fontFamily: AppStrings.kPlayfairDisplayFont),
         headline6: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 21,
@@ -64,7 +64,7 @@ class AppThemes {
         headline5: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w900,
-            fontFamily: AppStrings.PLAYFAIR_DISPLAY_FONT),
+            fontFamily: AppStrings.kPlayfairDisplayFont),
         headline6: TextStyle(
             fontWeight: FontWeight.w900,
             color: Colors.white,

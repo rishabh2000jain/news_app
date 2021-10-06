@@ -4,27 +4,29 @@ import 'package:flutter/material.dart';
 class SearchView extends StatefulWidget {
   final Function searchData;
   const SearchView({
+    required this.textController,
     required this.size,
     required this.searchData,
     Key? key
   })  :super(key: key);
 
   final Size size;
+  final TextEditingController textController;
   @override
   State<SearchView> createState() => _SearchViewState();
 }
 
 class _SearchViewState extends State<SearchView> {
   bool _isFocused = false;
-  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     return SizedBox(
-      width: widget.size.width * 0.9,
+      width: widget.size.width * 0.78,
       height: widget.size.width * 0.2,
       child: TextField(
-        controller: _controller,
+        controller: widget.textController,
         cursorColor: theme.primaryVariant,
         decoration: InputDecoration(
           hintStyle: TextStyle(
@@ -40,7 +42,7 @@ class _SearchViewState extends State<SearchView> {
           suffixIcon: _isFocused
               ? IconButton(
                   onPressed: () {
-                    _controller.text = '';
+                    widget.textController.text = '';
                   },
                   icon: Icon(
                     Icons.clear,
