@@ -15,7 +15,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreferences.init();
   return runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {

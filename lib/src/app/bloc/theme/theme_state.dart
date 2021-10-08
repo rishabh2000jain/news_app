@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 abstract class ThemeState {
   const ThemeState(this.theme);
-  final theme;
+  final ThemeMode theme;
 }
 
 class LightThemeState extends ThemeState {

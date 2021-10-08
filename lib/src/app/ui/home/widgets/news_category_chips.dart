@@ -5,10 +5,10 @@ import 'package:paper/src/constants/app_constants.dart';
 class CategoryChipList extends StatefulWidget {
   Function categorySelected;
 
-  CategoryChipList({
+  CategoryChipList({Key? key,
     required this.categorySelected,
     required this.colorScheme,
-  });
+  }) : super(key: key);
 
   final ColorScheme colorScheme;
 

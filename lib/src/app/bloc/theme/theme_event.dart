@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:paper/src/utils/themes_enum.dart';
 
 abstract class ThemeEvent extends Equatable {
   const ThemeEvent();

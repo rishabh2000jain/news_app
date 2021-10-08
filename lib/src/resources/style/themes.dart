@@ -10,6 +10,7 @@ class AppThemes {
       progressIndicatorTheme: const ProgressIndicatorThemeData(
           color: Colors.black, circularTrackColor: Colors.black12),
       appBarTheme: const AppBarTheme(
+          centerTitle: true,
           color: Colors.white, iconTheme: IconThemeData(color: Colors.black)),
       cardTheme: CardTheme(
         margin: AppConstants.kEdgeIsets10,
