@@ -5,4 +5,4 @@
 4. Main Screens:-
     1) TopStoriesScreen.
     2) StoriesDetailViewScreen.
-    3) SearchStoriesViewScreen.
+    3) SearchStoriesViewScreen.# news_app
