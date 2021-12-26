@@ -14,15 +14,15 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     if (event is AppThemeModel) {
       switch (event.theme) {
         case ThemeMode.light:
-         await AppPreferences.setThemeDetail(AppThemeOption.LIGHT);
+         await AppPreferences.setThemeDetail(AppThemeOption.tLight);
           yield const LightThemeState();
           break;
         case ThemeMode.system:
-          await AppPreferences.setThemeDetail(AppThemeOption.SYSTEM);
+          await AppPreferences.setThemeDetail(AppThemeOption.tSystem);
           yield const SystemThemeState();
           break;
         case ThemeMode.dark:
-          await AppPreferences.setThemeDetail(AppThemeOption.DARK);
+          await AppPreferences.setThemeDetail(AppThemeOption.tDark);
           yield const DarkThemeState();
           break;
       }

@@ -77,3 +77,4 @@ class _SearchViewState extends State<SearchView> {
     );
   }
 }
+

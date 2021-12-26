@@ -6,9 +6,9 @@ import 'news_list_item.dart';
 
 class TopHeadlinesList extends StatelessWidget{
   final ScrollController _controller;
-  bool _hasNextPage;
+  final bool _hasNextPage;
 
-  TopHeadlinesList({
+  const TopHeadlinesList({
     required ScrollController controller,
     required List<Article> articlesList,
     required bool hasNextPage,

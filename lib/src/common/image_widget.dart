@@ -4,19 +4,22 @@ import 'package:paper/src/resources/strings/app_strings.dart';
 import 'package:paper/src/utils/app_util.dart';
 
 class CommonImageView extends StatelessWidget {
-  const CommonImageView(
-      {this.width, required this.height, required this.imageUrl, Key? key})
-      : super(key: key);
+  const CommonImageView({
+    required this.height,
+    required this.imageUrl,
+    Key? key,
+    this.width,
+  }) : super(key: key);
   final String? imageUrl;
   final double height;
   final double? width;
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      AppUtil.isStringEmpty(imageUrl ?? '')
-          ? AppStrings.kBrokenImage
-          : imageUrl!,
+    return Image(
+      image: AppUtil.isStringEmpty(imageUrl ?? '')
+          ? const AssetImage(AppStrings.kBrokenImage)
+          : NetworkImage(imageUrl!) as ImageProvider,
       height: height,
       width: width,
       fit: BoxFit.fill,

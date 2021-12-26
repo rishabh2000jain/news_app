@@ -46,11 +46,11 @@ class AppPreferences {
       _logger.log(Level.INFO, 'getThemeDetail ${e.toString()}');
     }
     switch (AppThemeOption.values[_result]) {
-      case AppThemeOption.LIGHT:
+      case AppThemeOption.tLight:
         return const LightThemeState();
-      case AppThemeOption.DARK:
+      case AppThemeOption.tDark:
         return const DarkThemeState();
-      case AppThemeOption.SYSTEM:
+      case AppThemeOption.tSystem:
         return const SystemThemeState();
     }
   }

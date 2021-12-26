@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paper/src/app/repository/news/api/models/articles.dart';
 import 'package:paper/src/app/ui/search/widgets/search_news_item.dart';
+
 class SearchList extends StatelessWidget {
   const SearchList({
     required List<Article> articles,
@@ -21,12 +22,11 @@ class SearchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Expanded(
       child: ListView.builder(
           controller: _controller,
-          itemCount: _hasNext ?
-          _articles.length + 1 :
-          _articles.length,
+          itemCount: _hasNext ? _articles.length + 1 : _articles.length,
           itemBuilder: (context, pos) {
             return pos >= _articles.length
                 ? const Align(

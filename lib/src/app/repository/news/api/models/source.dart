@@ -10,10 +10,8 @@ class Source {
     _name = name;
   }
 
-  Source.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
-  }
+  factory Source.fromJson(dynamic json)=>_$SourceFromJson(json);
+
 
   @JsonKey(name: 'id')
   dynamic _id;
@@ -24,12 +22,7 @@ class Source {
 
   String? get name => _name;
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    return map;
-  }
+  Map<String, dynamic> toJson() =>_$SourceToJson(this);
 }
 
 /// source : {"id":null,"name":"Nintendo Life"}

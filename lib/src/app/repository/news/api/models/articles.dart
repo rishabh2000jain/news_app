@@ -25,18 +25,8 @@ class Article {
     _content = content;
   }
 
- factory Article.fromJson(dynamic json) => _$ArticlesFromJson(json);
+ factory Article.fromJson(dynamic json) => _$ArticleFromJson(json);
 
-  //  {
-  //   _source = json['source'] != null ? Source.fromJson(json['source']) : null;
-  //   _author = json['author'];
-  //   _title = json['title'];
-  //   _description = json['description'];
-  //   _url = json['url'];
-  //   _urlToImage = json['urlToImage'];
-  //   _publishedAt = json['publishedAt'];
-  //   _content = json['content'];
-  // }
   @JsonKey(name: 'source')
   Source? _source;
   @JsonKey(name: 'author')
@@ -70,19 +60,6 @@ class Article {
 
   String? get content => _content;
 
-  Map<String, dynamic> toJson() => _$ArticlesToJson(this);
-// {
-//   final map = <String, dynamic>{};
-//   if (_source != null) {
-//     map['source'] = _source?.toJson();
-//   }
-//   map['author'] = _author;
-//   map['title'] = _title;
-//   map['description'] = _description;
-//   map['url'] = _url;
-//   map['urlToImage'] = _urlToImage;
-//   map['publishedAt'] = _publishedAt;
-//   map['content'] = _content;
-//   return map;
-// }
+  Map<String, dynamic> toJson() => _$ArticleToJson(this);
+
 }

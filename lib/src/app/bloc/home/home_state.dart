@@ -1,4 +1,3 @@
-
 import 'package:paper/src/api_lib/api_exception.dart';
 import 'package:paper/src/api_lib/api_response_wraper.dart';
 import 'package:paper/src/app/repository/news/api/models/news_response.dart';
@@ -8,42 +7,37 @@ abstract class HomeState {
 }
 
 class InitialSearchState extends HomeState {
-  const InitialSearchState():super();
+  const InitialSearchState() : super();
 
-  @override
   List<Object> get props => [];
 }
 
 class LoadingSearchState extends HomeState {
-  const LoadingSearchState():super();
+  const LoadingSearchState() : super();
 
-  @override
   List<Object> get props => [];
 }
 
 class LoadedSearchState extends HomeState {
   final ApiResponseWrapper<NewsResponse> searchResponse;
 
-  const LoadedSearchState(this.searchResponse):super();
+  const LoadedSearchState(this.searchResponse) : super();
 
-  @override
   List<Object> get props => [searchResponse];
 }
 
 class SearchApiErrorState extends HomeState {
   final NullThrownError? error;
 
-  const SearchApiErrorState(this.error):super();
+  const SearchApiErrorState(this.error) : super();
 
-  @override
   List<Object?> get props => [error];
 }
 
 class SearchErrorState extends HomeState {
   final ServerError? error;
 
-  const SearchErrorState(this.error):super();
+  const SearchErrorState(this.error) : super();
 
-  @override
   List<Object?> get props => [error];
 }

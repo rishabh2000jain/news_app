@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:paper/src/constants/app_constants.dart';
 
 class CategoryChipList extends StatefulWidget {
-  Function categorySelected;
+ final Function categorySelected;
 
-  CategoryChipList({Key? key,
+  const CategoryChipList({
     required this.categorySelected,
     required this.colorScheme,
+    Key? key,
   }) : super(key: key);
 
   final ColorScheme colorScheme;
@@ -33,10 +34,10 @@ class _CategoryChipListState extends State<CategoryChipList> {
               child: ChoiceChip(
                 label: Text(
                   AppConstants.kNewsCategory[pos]),
-                selected: this._pos == pos,
+                selected: _pos == pos,
                 onSelected: (selected) {
                   setState(() {
-                    this._pos = pos;
+                    _pos = pos;
                     widget.categorySelected(AppConstants.kNewsCategory[pos]);
                   });
                 },

@@ -140,13 +140,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onSelected: (AppThemeOption theme) {
               switch (theme) {
-                case AppThemeOption.LIGHT:
+                case AppThemeOption.tLight:
                   _themeBloc.add(const AppThemeModel(theme: ThemeMode.light));
                   break;
-                case AppThemeOption.DARK:
+                case AppThemeOption.tDark:
                   _themeBloc.add(const AppThemeModel(theme: ThemeMode.dark));
                   break;
-                case AppThemeOption.SYSTEM:
+                case AppThemeOption.tSystem:
                   _themeBloc.add(const AppThemeModel(theme: ThemeMode.system));
                   break;
               }
@@ -157,17 +157,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 PopupMenuItem(
                   enabled: !(state.theme == ThemeMode.light),
                   child: const Text('Light Theme'),
-                  value: AppThemeOption.LIGHT,
+                  value: AppThemeOption.tLight,
                 ),
                 PopupMenuItem(
                   child: const Text('Dark Theme'),
                   enabled: !(state.theme == ThemeMode.dark),
-                  value: AppThemeOption.DARK,
+                  value: AppThemeOption.tDark,
                 ),
                 PopupMenuItem(
                     enabled: !(state.theme == ThemeMode.system),
                     child: const Text('System Theme'),
-                    value: AppThemeOption.SYSTEM),
+                    value: AppThemeOption.tSystem),
               ];
             },
           ),

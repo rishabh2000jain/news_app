@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:paper/src/app/repository/news/api/models/articles.dart';
 import 'package:paper/src/common/image_widget.dart';
 import 'package:paper/src/navigation/app_router.dart';
-import 'package:paper/src/resources/strings/app_strings.dart';
-import 'package:paper/src/utils/app_util.dart';
 
 class SearchNewsItem extends StatelessWidget {
   const SearchNewsItem({
-    Key? key,
     required Article articles,
     required this.size,
     required this.theme,
+    Key? key,
   })  : _articles = articles,
         super(key: key);
 
@@ -39,7 +37,11 @@ class SearchNewsItem extends StatelessWidget {
                 SizedBox(
                   width: 90,
                   height: 50,
-                  child:CommonImageView(height: 50,width: 90,imageUrl: _articles.urlToImage,),
+                  child: CommonImageView(
+                    height: 50,
+                    width: 90,
+                    imageUrl: _articles.urlToImage,
+                  ),
                 ),
                 const SizedBox(
                   width: 10,
